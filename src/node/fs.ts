@@ -54,22 +54,22 @@ export function fileStats(fpath: string): [Stats|undefined, string] {
 export function isFile(fpath: string): boolean {
     if (!fpath) return false;
 
-	const [stats, fp] = fileStats(fpath);
+	const [stats, _] = fileStats(fpath);
 	return stats?.isFile() || false;
 }
 
 export function isDir(fpath: string): boolean {
     if (!fpath) return false;
 
-	let [stats, fp] = fileStats(fpath);
+	let [stats, _] = fileStats(fpath);
 	return stats?.isDirectory() || false;
 }
 
 export function assertDir(fpath: string, msg?: string) {
-    if (!isDir(fpath)) throw new Error(msg || `${fpath} not a folder`);
+    if (!isDir(fpath)) throw Error(msg || `${fpath} not a folder`);
 }
 export function assertFile(fpath: string, msg?: string) {
-    if (!isFile(fpath)) throw new Error(msg || `${fpath} not a file`);
+    if (!isFile(fpath)) throw Error(msg || `${fpath} not a file`);
 }
 
 // const asciiPathRegExp = /^[0-9a-zA-Z\.\/]+$/;

@@ -20,10 +20,10 @@
   "devDependencies": {
     "@types/node": "latest",
     "@types/chai": "latest",
-    "@types/mocha": "latest",
     "chai": "latest",
     "mocha": "latest",
-    "typescript": "latest"
+    "typescript": "latest",
+    "ts-node": "latest"
   },
   "files": [
     "dist/**/*"
@@ -32,13 +32,13 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": "./dist/index.js",
-    "./node": "./dist/node/index.js"
+    "./node": "./dist/node/index.js",
+    "./dom": "./dist/dom/index.js"
   },
   "typesVersions": {
     "*": {
-      "node": [
-        "dist/node"
-      ]
+      "node": [ "dist/node" ],
+      "dom": [ "dist/dom" ]
     }
   }
 }
