@@ -20,6 +20,7 @@
   "devDependencies": {
     "@types/node": "latest",
     "@types/chai": "latest",
+    "@types/debug": "latest",
     "chai": "latest",
     "mocha": "latest",
     "typescript": "latest",

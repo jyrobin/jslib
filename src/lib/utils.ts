@@ -1,6 +1,7 @@
 
 export type AsyncVoid = () => Promise<void>;
 export type AnyMap = { [key: string]: any };
+export type NumberMap = { [key: string]: number };
 export type UnknownMap = { [key: string]: unknown };
 export type StrMap = { [key: string]: string };
 
