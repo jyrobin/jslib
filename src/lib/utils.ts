@@ -10,7 +10,7 @@ export function assert(b: boolean, msg?: string): void {
 }
 
 // throws for bad obj 
-export function allPropertyNames(obj: any): string[] {
+export function allPropertyNames(obj: unknown): string[] {
     const props: string[] = [];
     do {
         props.push(...Object.getOwnPropertyNames(obj));
@@ -46,4 +46,45 @@ export function pickStrings(obj: UnknownMap, ...names: string[]): StrMap {
         }
     }
     return ret;
+}
+
+export class StringBuffer {
+    private concat: string = '';
+    private buf: string[] | undefined = undefined; 
+    log(s: string) {
+        this.push(s, '\n');
+    }
+    push(...args: string[]) {
+        if (this.buf === undefined) {
+            this.buf = args; // safe?
+        } else {
+            this.buf.push(...args);
+        }
+    }
+    toString() {
+        if (this.buf !== undefined) {
+            this.concat += this.buf.join('');
+            this.buf === undefined;
+        }
+        return this.concat;
+    }
+}
+
+export function hasOwnProperty<X extends {}, Y extends PropertyKey>
+  (obj: X, prop: Y): obj is X & Record<Y, unknown>
+{
+  return obj.hasOwnProperty(prop);
+}
+
+export type Struct = Record<string, unknown>;
+
+export function isStruct(obj: unknown):  obj is Struct {
+    return !!obj && typeof obj === 'object' && !Array.isArray(obj);
+}
+
+export function mergeStruct(r: Struct, s: Struct): Struct {
+    Object.keys(s).forEach(key => {
+        r[key] = s[key];
+    });
+    return r;
 }

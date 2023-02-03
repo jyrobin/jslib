@@ -1,5 +1,6 @@
+
 import { resolve, join, normalize, basename } from 'path';
-import { existsSync, statSync, Stats, readdirSync } from 'fs';
+import { mkdirSync, existsSync, statSync, Stats, readdirSync } from 'fs';
 
 export function findStats(name: string, startPath?: string, dirs?: string[]): [Stats|undefined, string] {
 	let dir = resolve(startPath || '.');
@@ -83,69 +84,4 @@ export function sanitizePath(fpath: string, prefix?: string, re?: RegExp): strin
     return ret;
 }
 
-export interface Node {
-  id: string;
-  name: string;
-  parent?: string;
-  children?: string[]; // undefined is leaf
-}
 
-export type NodeMap = { [key: string]: Node };
-
-// baseDir sanitized
-function _collectNodes(ret: Node[], baseDir: string, parentPath: string, relPaths: string[], depth: number): Node[] {
-    if (depth === 0) return ret;
-
-    for (const relPath of relPaths) {
-        let newPath = join(parentPath, relPath); // join seems to normalize
-        if (newPath === '.') newPath = '';
-        const fpath = join(baseDir, newPath);
-        if (isDir(fpath)) {
-            const fnames = readdirSync(fpath);
-            ret.push({
-                id: newPath,
-                parent: newPath || undefined,
-                name: basename(fpath) + '/',
-                children: fnames.map(fname => join(newPath, fname)),
-            });
-            _collectNodes(ret, baseDir, newPath, fnames, depth - 1);
-        } else if (isFile(fpath)) {
-            ret.push({
-                id: newPath,
-                parent: newPath || undefined,
-                name: basename(fpath),
-            });
-        }
-    }
-    return ret;
-}
-
-export function collectNodes(nodes: Node[], baseDir: string, relPaths: string[], depth: number): Node[] {
-    if (depth === 0) return nodes;
-
-    baseDir = sanitizePath(baseDir).replace(/\/+$/, ''); // no tailing slashes
-    if (!isDir(baseDir)) return nodes;
-
-    relPaths = relPaths
-        .map(name => sanitizePath(name).replace(/\/+$/, '')) // no tailing slashes
-        .filter(x => x);
-
-    return _collectNodes(nodes, baseDir, '', relPaths, depth);
-}
-
-export function getTreeNodes(baseDir: string, relPaths: string[] | undefined, depth: number, prefix?: string): Node[] {
-    if (!relPaths) {
-        relPaths = [''];
-    } else {
-        const len = prefix ? prefix.length : 0;
-        if (prefix) relPaths = relPaths.filter(p => p.startsWith(prefix)).map(p => p.slice(len));
-    }
-
-    const ret = collectNodes([] as Node[], baseDir, relPaths, depth);
-    return !prefix ? ret : ret.map(n => ({
-        id: prefix + n.id,
-        parent: n.parent === undefined ? undefined : prefix + n.parent,
-        name: n.name,
-        children: n.children?.map(ch => prefix + ch),
-    }));
-}

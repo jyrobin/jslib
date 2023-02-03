@@ -1,45 +1,38 @@
 {
   "name": "@jyrobin/jslib",
+  "type": "module",
   "version": "0.1.0",
-  "description": "A sampling of server-side/client-side js utilities in typescript",
+  "description": "A sampling of js utilities in typescript",
   "scripts": {
-    "build": "yarn tsc",
-    "test": "mocha"
+    "build": "yarn tsc --build",
+    "clean": "yarn tsc --build --clean",
+    "watch": "yarn tsc --build --watch",
+    "test": "tsm ../node_modules/uvu/bin.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jyrobin/jslib.git"
   },
-  "keywords": [],
   "author": "Jing-Ying Chen <jy.robin.chen@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/jyrobin/jslib/issues"
   },
   "homepage": "https://github.com/jyrobin/jslib#readme",
+  "dependencies": {
+    "format-util": "latest"
+  },
   "devDependencies": {
-    "@types/node": "latest",
-    "@types/chai": "latest",
     "@types/debug": "latest",
-    "chai": "latest",
-    "mocha": "latest",
+    "@types/format-util": "latest",
+    "uvu": "latest",
+    "tsm": "latest",
     "typescript": "latest",
     "ts-node": "latest"
   },
-  "files": [
-    "dist/**/*"
-  ],
   "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "exports": {
     ".": "./dist/index.js",
-    "./node": "./dist/node/index.js",
-    "./dom": "./dist/dom/index.js"
-  },
-  "typesVersions": {
-    "*": {
-      "node": [ "dist/node" ],
-      "dom": [ "dist/dom" ]
-    }
+    "./*": "./dist/*/index.js"
   }
 }

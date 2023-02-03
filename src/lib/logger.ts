@@ -1,6 +1,5 @@
 
-import { AnyMap } from './utils';
-
+import { AnyMap } from './utils.js';
 
 export interface Logger {
     error(obj: string|AnyMap, ...args: any[]): void;
